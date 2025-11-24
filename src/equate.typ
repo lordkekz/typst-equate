@@ -183,6 +183,7 @@
 #let layout-line(
   number: none,
   number-align: none,
+  number-gap: .5em,
   number-width: auto,
   text-dir: auto,
   line
@@ -232,12 +233,11 @@
 
   let num = box(width: number-width, align(number-align, number))
   let line-width = measure(equation(line.join(), measure: true)).width
-  let gap = 0.5em
 
   layout(bounds => {
     let space = if bounds.width.pt().is-infinite() {
       // If we're in an unbounded container, the number is placed right next to
-      // the equation body, with only the `gap` as spacing.
+      // the equation body, with only the `number-gap` as spacing.
       0pt
     } else if equation-align == center {
       bounds.width - line-width - 2 * number-width
@@ -247,19 +247,19 @@
 
     let body = if number-align.x == left {
       if equation-align == center {
-        h(-gap) + num + h(space / 2 + gap) + line.join() + h(space / 2) + hide(num)
+        h(-number-gap) + num + h(space / 2 + number-gap) + line.join() + h(space / 2) + hide(num)
       } else if equation-align == right {
-        num + h(space + 2 * gap) + line.join()
+        num + h(space + 2 * number-gap) + line.join()
       } else {
-        h(-gap) + num + h(gap) + line.join() + h(space + gap)
+        h(-number-gap) + num + h(number-gap) + line.join() + h(space + number-gap)
       }
     } else {
       if equation-align == center {
-        hide(num) + h(space / 2) + line.join() + h(space / 2 + gap) + num + h(-gap)
+        hide(num) + h(space / 2) + line.join() + h(space / 2 + number-gap) + num + h(-number-gap)
       } else if equation-align == right {
-        h(space + gap) + line.join() + h(gap) + num + h(-gap)
+        h(space + number-gap) + line.join() + h(number-gap) + num + h(-number-gap)
       } else {
-        line.join() + h(space + 2 * gap) + num
+        line.join() + h(space + 2 * number-gap) + num
       }
     }
 
@@ -296,8 +296,7 @@
     .enumerate()
     .filter(((i, line)) => {
       if i not in labelled { return false }
-      return line.last().text == "<equate:revoke>"
-    })
+      return line.last().text == "<equate:revoke>" })
     .map(((i, _)) => i)
 
   // The "revoke" label shall not count as a labelled line.
@@ -531,6 +530,7 @@
 #let equate(
   breakable: auto,
   sub-numbering: false,
+  number-gap: .5em,
   number-mode: "line",
   debug: false,
   extra-show: it => it,
@@ -652,6 +652,7 @@
         extra-show(layout-line(
           lines.first(),
           number: number,
+          number-gap: number-gap,
           number-align: number-align,
           text-dir: text-dir
         ))
@@ -698,6 +699,7 @@
           line,
           number: number,
           number-align: number-align,
+          number-gap: number-gap,
           number-width: max-number-width,
           text-dir: text-dir
         )
