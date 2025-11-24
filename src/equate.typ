@@ -647,16 +647,14 @@
         // Update state to allow correct referencing.
         sub-numbering-state.update(_ => sub-numbering)
 
-        // Apply extra-show rule to allow for customizing the container of
+        // Apply extra-show to allow for customizing the container of
         // equate's block equations.
-        show: extra-show
-
-        layout-line(
+        extra-show(layout-line(
           lines.first(),
           number: number,
           number-align: number-align,
           text-dir: text-dir
-        )
+        ))
 
         // Step back counter as we introducted an additional equation
         // that increased the counter by one.
@@ -679,12 +677,8 @@
     // Update state to allow correct referencing.
     sub-numbering-state.update(_ => sub-numbering)
 
-    // Apply extra-show rule to allow for customizing the container of equate's
-    // block equations.
-    show: extra-show
-
     // Layout equation as grid to allow page breaks.
-    block(grid(
+    extra-show(block(grid(
       columns: 1,
       row-gutter: par.leading,
       ..realign(lines).enumerate().map(((i, line)) => {
@@ -708,7 +702,7 @@
           text-dir: text-dir
         )
       })
-    ))
+    )))
 
     // Revert equation counter step(s).
     if it.numbering == none {
