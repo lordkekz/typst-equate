@@ -524,6 +524,8 @@
 // - number-mode: Whether to number all lines or only lines containing a label.
 //                Must be either "line" or "label".
 // - debug: Whether to show alignment spacers for debugging.
+// - extra-show: Show rule which is applied to block equation that are layouted
+//               by equate.
 //
 // Returns: The body with the applied show rules.
 #let equate(
@@ -531,6 +533,7 @@
   sub-numbering: false,
   number-mode: "line",
   debug: false,
+  extra-show: it => it,
   body
 ) = {
   // Validate parameters.
@@ -644,6 +647,10 @@
         // Update state to allow correct referencing.
         sub-numbering-state.update(_ => sub-numbering)
 
+        // Apply extra-show rule to allow for customizing the container of
+        // equate's block equations.
+        show: extra-show
+
         layout-line(
           lines.first(),
           number: number,
@@ -671,6 +678,10 @@
 
     // Update state to allow correct referencing.
     sub-numbering-state.update(_ => sub-numbering)
+
+    // Apply extra-show rule to allow for customizing the container of equate's
+    // block equations.
+    show: extra-show
 
     // Layout equation as grid to allow page breaks.
     block(grid(
